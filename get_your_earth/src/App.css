@@ -1,31 +1,80 @@
+:root {
+  --color-primary: #1e88e5;
+  --color-secondary: #4caf50;
+  --color-background-light: #f4f7f6;
+  --color-surface: #ffffff;
+  --color-text-dark: #2c3e50;
+  --color-text-medium: #7f8c8d;
+  --color-accent: #ffb300;
+  --color-border: #e0e0e0;
+
+  --font-family-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --box-shadow-subtle: 0 4px 6px rgba(0, 0, 0, 0.08);
+  --box-shadow-active: 0 6px 10px rgba(0, 0, 0, 0.15);
+
+  --transition-speed: 0.3s;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background-light);
+  color: var(--color-text-dark);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: var(--color-surface);
+  min-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--color-text-dark);
+  padding: 20px;
+  box-shadow: var(--box-shadow-subtle);
+  flex-grow: 1;
 }
 
-.App-link {
-  color: #61dafb;
+.App-header h1 {
+  font-size: 3em;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.App-logo {
+  height: 20vmin;
+  pointer-events: none;
+  border-radius: 50%;
+  box-shadow: 0 0 0 8px var(--color-border), 0 0 20px rgba(30, 136, 229, 0.4);
+  animation: App-logo-spin infinite 20s linear;
+  margin-bottom: 30px;
 }
 
 @keyframes App-logo-spin {
@@ -34,5 +83,280 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.App-header > a {
+  display: inline-block;
+  margin: 10px 15px;
+  padding: 10px 20px;
+  border: 2px solid var(--color-primary);
+  border-radius: 25px;
+  color: var(--color-primary);
+  background-color: transparent;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
+}
+
+.App-header > a:hover {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-subtle);
+}
+
+.menu-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-surface);
+  padding: 10px 40px;
+  box-shadow: var(--box-shadow-subtle);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.menu-title a {
+  font-size: 1.5em;
+  font-weight: 800;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.menu-list {
+  display: flex;
+  gap: 15px;
+}
+
+.menu-item a {
+  display: block;
+  padding: 8px 15px;
+  color: var(--color-text-dark);
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  text-transform: capitalize;
+}
+
+.menu-item a:hover {
+  color: var(--color-primary);
+  background-color: rgba(30, 136, 229, 0.08);
+  transform: translateY(-1px);
+}
+
+.menu-item.active a {
+  color: var(--color-surface);
+  background-color: var(--color-primary);
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(30, 136, 229, 0.4);
+  transform: translateY(-2px);
+}
+
+.menu-item.active a:hover {
+  background-color: #1a78c2;
+  color: var(--color-surface);
+  box-shadow: 0 6px 12px rgba(30, 136, 229, 0.6);
+}
+
+.buttom-word {
+  padding: 20px;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.9em;
+  color: var(--color-text-medium);
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.buttom-word a {
+  color: var(--color-text-medium);
+  margin: 0 5px;
+  font-weight: 400;
+}
+
+.buttom-word a:hover {
+  color: var(--color-primary);
+}
+
+.App-header > div {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .menu-container {
+    flex-direction: column;
+    padding: 10px 20px;
+  }
+  .menu-list {
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* CloudLens 컴포넌트 스타일 */
+.cloud-lens-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  background-color: var(--color-surface);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow-subtle);
+}
+
+.cloud-lens-container h1 {
+  color: var(--color-primary);
+  margin-bottom: 5px;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+.cloud-lens-container p {
+  color: var(--color-text-medium);
+  font-size: 1.1em;
+}
+
+.cloud-lens-container h2 {
+    color: var(--color-text-dark);
+    font-size: 1.5em;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.webcam-and-capture-area {
+  margin: 30px auto;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-background-light);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.webcam-and-capture-area > div {
+    border: 3px solid var(--color-primary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.webcam-and-capture-area video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.webcam-and-capture-area div > div {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--color-text-dark);
+}
+
+.webcam-and-capture-area div > div p {
+    margin: 5px 0;
+    color: inherit;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 15px 0;
+  background-color: var(--color-secondary);
+  color: var(--color-surface);
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  transition: background-color var(--transition-speed), transform 0.1s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #43a047;
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  background-color: #388e3c;
+  transform: translateY(0);
+}
+
+button:disabled {
+  background-color: var(--color-border);
+  color: var(--color-text-medium);
+  cursor: not-allowed;
+}
+
+.result-area {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+  align-items: flex-start;
+  padding: 20px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.captured-image-preview, .prediction-box {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: var(--color-surface);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex-basis: 45%;
+}
+
+.captured-image-preview img {
+    border-radius: 4px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border: 1px solid var(--color-border);
+}
+
+.prediction-box {
+    border-left: 5px solid var(--color-primary);
+    text-align: left;
+}
+
+.prediction-box strong {
+    color: var(--color-primary);
+}
+
+.prediction-box h3 {
+    color: var(--color-text-dark);
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+.prediction-box p {
+    font-size: 1em;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .cloud-lens-container {
+    padding: 20px 10px;
+  }
+  
+  .webcam-and-capture-area {
+      max-width: 100%;
+  }
+
+  .webcam-and-capture-area > div {
+      width: 100% !important;
+      height: 250px !important;
+  }
+  
+  .result-area {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .captured-image-preview, .prediction-box {
+      flex-basis: 100%;
   }
 }
