@@ -21,7 +21,7 @@ const cloudDescriptions: Record<string, string> = {
 
 type InputSize = [number, number];
 
-const CanvasCaptureLens: React.FC = () => {
+const CloudLens: React.FC = () => {
   const [prediction, setPrediction] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,8 @@ const CanvasCaptureLens: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<tf.LayersModel | null>(null);
-  const modelInputShapeRef = useRef<InputSize>([224, 224]); 
+  const modelInputShapeRef = useRef<InputSize>([224, 224]);
+  const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -52,18 +53,51 @@ const CanvasCaptureLens: React.FC = () => {
         }
         
         if (videoRef.current) {
-          const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: "environment" },
-          });
-          videoRef.current.srcObject = stream;
-          videoRef.current.onloadedmetadata = () => {
-            videoRef.current!.play();
-            setIsWebcamReady(true);
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error("이 브라우저는 카메라를 지원하지 않습니다.");
+          }
+
+          const constraints = { 
+            video: {
+              facingMode: "environment"
+            },
+            audio: false
           };
+
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            
+            videoRef.current.srcObject = stream;
+            streamRef.current = stream;
+            
+            videoRef.current.onloadedmetadata = () => {
+              videoRef.current?.play().then(() => {
+                setIsWebcamReady(true);
+              }).catch(e => {
+                setError("비디오 재생 실패: " + e.message);
+              });
+            };
+            
+          } catch (cameraErr: any) {
+            let errorMsg = "카메라 접근 실패\n";
+            errorMsg += "오류 타입: " + cameraErr.name + "\n";
+            
+            if (cameraErr.name === 'NotAllowedError') {
+              errorMsg += "카메라 권한을 허용해주세요.";
+            } else if (cameraErr.name === 'NotFoundError') {
+              errorMsg += "카메라를 찾을 수 없습니다.";
+            } else if (cameraErr.name === 'NotReadableError') {
+              errorMsg += "카메라가 다른 앱에서 사용 중입니다.";
+            } else {
+              errorMsg += cameraErr.message;
+            }
+            
+            throw new Error(errorMsg);
+          }
         }
         
-      } catch (err) {
-        setError("초기화 실패: 모델 URL 확인 또는 카메라 권한(HTTPS/localhost) 및 충돌 문제 점검 필요");
+      } catch (err: any) {
+        setError(err.message || "초기화 실패");
       } finally {
         setLoading(false);
       }
@@ -72,9 +106,8 @@ const CanvasCaptureLens: React.FC = () => {
     init();
 
     return () => {
-      const currentVideoRef = videoRef.current;
-      if (currentVideoRef && currentVideoRef.srcObject) {
-        (currentVideoRef.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
       }
     };
   }, []);
@@ -114,7 +147,7 @@ const CanvasCaptureLens: React.FC = () => {
         setDescription(cloudDescriptions[bestClassName] || "설명이 없습니다.");
 
     } catch (err) {
-      setError("구름 분석 중 오류가 발생했습니다. (텐서플로우 처리 오류)");
+      setError("구름 분석 중 오류가 발생했습니다.");
     } finally {
         if (tensor) tensor.dispose();
         if (predictions) predictions.dispose();
@@ -145,27 +178,26 @@ const CanvasCaptureLens: React.FC = () => {
     }
   };
 
-
   return (
-    <div className="cloud-lens-container" style={{ textAlign: 'center', padding: '20px' }}>
+    <div className="cloud-lens-container">
       <h1>Cloud Lens</h1>
       <p>구름의 종류와 설명을 보여줍니다.</p>
       
-      <div className="webcam-and-capture-area" style={{ margin: '20px auto', maxWidth: '400px' }}>
+      <div className="webcam-and-capture-area">
         
-        <div style={{ position: 'relative', width: '400px', height: '300px', margin: '0 auto', border: '1px solid #ccc', backgroundColor: '#eee' }}>
+        <div style={{ position: 'relative', maxWidth: '400px', margin: '0 auto', minHeight: '300px', border: '1px solid var(--border-color)', backgroundColor: 'var(--background-color)', borderRadius: '8px' }}>
             <video 
               ref={videoRef} 
               autoPlay 
               muted 
               playsInline 
-              style={{ width: '100%', height: '100%', display: isWebcamReady ? 'block' : 'none' }}
+              style={{ width: '100%', height: '100%', display: isWebcamReady ? 'block' : 'none', objectFit: 'cover', borderRadius: '8px' }}
             />
             
             {(!isWebcamReady || error) && (
-              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: 'var(--surface-color)', borderRadius: '8px' }}>
                 {loading && <p>모델 및 웹캠 활성화 중...</p>}
-                {error && <p style={{ color: 'red', padding: '10px' }}>{error}</p>}
+                {error && <p style={{ color: 'red', padding: '10px' }}>오류: {error}</p>}
                 {!loading && !error && <p>카메라 권한을 요청합니다...</p>}
               </div>
             )}
@@ -176,22 +208,21 @@ const CanvasCaptureLens: React.FC = () => {
         <button 
           onClick={handleSnapshot} 
           disabled={!isWebcamReady || loading}
-          style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer', margin: '15px 0' }}
         >
           {loading ? '분석 중...' : '촬영 및 분석'}
         </button>
       </div>
 
-      <div className="result-area" style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginTop: '20px' }}>
+      <div className="result-area">
         {capturedImage && (
             <div className="captured-image-preview">
                 <h2>캡처된 이미지</h2>
-                <img src={capturedImage} alt="Captured Cloud" style={{ maxWidth: '300px', border: '2px solid #ccc' }}/>
+                <img src={capturedImage} alt="Captured Cloud"/>
             </div>
         )}
         
         {prediction && !loading && (
-          <section className="prediction-box" style={{ textAlign: 'left' }}>
+          <section className="prediction-box">
             <h2>분석 결과</h2>
             <p><strong>감지된 구름 종류:</strong> {prediction}</p>
             <p><strong>신뢰도:</strong> {confidence}%</p>
@@ -205,4 +236,4 @@ const CanvasCaptureLens: React.FC = () => {
   );
 };
 
-export default CanvasCaptureLens;
+export default CloudLens;

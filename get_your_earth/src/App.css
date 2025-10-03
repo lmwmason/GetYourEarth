@@ -1,80 +1,150 @@
 :root {
-  --color-primary: #1e88e5;
-  --color-secondary: #4caf50;
-  --color-background-light: #f4f7f6;
-  --color-surface: #ffffff;
-  --color-text-dark: #2c3e50;
-  --color-text-medium: #7f8c8d;
-  --color-accent: #ffb300;
-  --color-border: #e0e0e0;
-
-  --font-family-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  --box-shadow-subtle: 0 4px 6px rgba(0, 0, 0, 0.08);
-  --box-shadow-active: 0 6px 10px rgba(0, 0, 0, 0.15);
-
-  --transition-speed: 0.3s;
+  --primary-color: #3f51b5;
+  --secondary-color: #4caf50;
+  --background-color: #f0f2f5;
+  --surface-color: #ffffff;
+  --text-color: #212121;
+  --sub-text-color: #757575;
+  --border-color: #e0e0e0;
+  --active-color: #ff9800;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
+body.dark-mode {
+  --primary-color: #9fa8da;
+  --secondary-color: #a5d6a7;
+  --background-color: #121212;
+  --surface-color: #1e1e1e;
+  --text-color: #e0e0e0;
+  --sub-text-color: #a0a0a0;
+  --border-color: #333333;
+  --active-color: #ffb74d;
 }
 
 body {
   margin: 0;
-  font-family: var(--font-family-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-background-light);
-  color: var(--color-text-dark);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--primary-color);
   text-decoration: none;
-  transition: color var(--transition-speed);
+  transition: color 0.2s;
 }
 
 a:hover {
-  color: var(--color-accent);
+  color: var(--active-color);
 }
 
 .App {
-  text-align: center;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-.App-header {
-  background-color: var(--color-surface);
-  min-height: calc(100vh - 120px);
+.menu-container {
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 15px 30px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--color-text-dark);
-  padding: 20px;
-  box-shadow: var(--box-shadow-subtle);
-  flex-grow: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.App-header h1 {
-  font-size: 3em;
-  color: var(--color-primary);
-  margin-bottom: 20px;
-  letter-spacing: 2px;
+.menu-title a {
+  font-size: 1.8rem;
   font-weight: 700;
+  color: var(--primary-color);
+  letter-spacing: -0.5px;
+}
+
+.menu-title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.color-mode-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.color-mode-toggle:hover {
+    background-color: var(--border-color);
+    color: var(--active-color);
+}
+
+.menu-list {
+  display: flex;
+  gap: 25px;
+}
+
+.menu-item {
+  padding: 5px 0;
+  position: relative;
+}
+
+.menu-item a {
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--sub-text-color);
+}
+
+.menu-item.active a {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.active-indicator {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--active-color);
+}
+
+.App-header {
+  flex-grow: 1;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.main-title {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--sub-text-color);
+    margin-bottom: 30px;
 }
 
 .App-logo {
-  height: 20vmin;
+  height: 200px;
   pointer-events: none;
-  border-radius: 50%;
-  box-shadow: 0 0 0 8px var(--color-border), 0 0 20px rgba(30, 136, 229, 0.4);
   animation: App-logo-spin infinite 20s linear;
-  margin-bottom: 30px;
+  filter: drop-shadow(0 0 10px var(--secondary-color));
 }
 
 @keyframes App-logo-spin {
@@ -86,277 +156,237 @@ a:hover {
   }
 }
 
-.App-header > a {
-  display: inline-block;
-  margin: 10px 15px;
-  padding: 10px 20px;
-  border: 2px solid var(--color-primary);
-  border-radius: 25px;
-  color: var(--color-primary);
-  background-color: transparent;
-  font-weight: 600;
-  transition: all var(--transition-speed) ease;
+.main-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
 }
 
-.App-header > a:hover {
-  background-color: var(--color-primary);
-  color: var(--color-surface);
-  transform: translateY(-2px);
-  box-shadow: var(--box-shadow-subtle);
+.main-link-item {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.menu-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--color-surface);
-  padding: 10px 40px;
-  box-shadow: var(--box-shadow-subtle);
-  border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+.main-link-item:hover {
+    background-color: var(--primary-color);
+    color: var(--surface-color);
+    border-color: var(--primary-color);
 }
 
-.menu-title a {
-  font-size: 1.5em;
-  font-weight: 800;
-  color: var(--color-primary);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.menu-list {
-  display: flex;
-  gap: 15px;
-}
-
-.menu-item a {
-  display: block;
-  padding: 8px 15px;
-  color: var(--color-text-dark);
-  font-weight: 500;
-  border-radius: 4px;
-  transition: all var(--transition-speed) ease;
-  position: relative;
-  text-transform: capitalize;
-}
-
-.menu-item a:hover {
-  color: var(--color-primary);
-  background-color: rgba(30, 136, 229, 0.08);
-  transform: translateY(-1px);
-}
-
-.menu-item.active a {
-  color: var(--color-surface);
-  background-color: var(--color-primary);
-  font-weight: 600;
-  box-shadow: 0 4px 8px rgba(30, 136, 229, 0.4);
-  transform: translateY(-2px);
-}
-
-.menu-item.active a:hover {
-  background-color: #1a78c2;
-  color: var(--color-surface);
-  box-shadow: 0 6px 12px rgba(30, 136, 229, 0.6);
+.footer-area {
+    border-top: 1px solid var(--border-color);
+    background-color: var(--surface-color);
+    padding: 15px 30px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--sub-text-color);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .buttom-word {
-  padding: 20px;
-  background-color: var(--color-surface);
-  border-top: 1px solid var(--color-border);
-  font-size: 0.9em;
-  color: var(--color-text-medium);
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
 }
 
 .buttom-word a {
-  color: var(--color-text-medium);
-  margin: 0 5px;
-  font-weight: 400;
+    color: var(--sub-text-color);
 }
 
 .buttom-word a:hover {
-  color: var(--color-primary);
+    color: var(--primary-color);
 }
 
-.App-header > div {
-  width: 100%;
-  max-width: 1200px;
-  padding: 20px;
-  box-sizing: border-box;
+.cloud-lens-container, .weather-analysis-container, .rock-lens-container, .watch-planet-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+body.dark-mode .cloud-lens-container, 
+body.dark-mode .weather-analysis-container, 
+body.dark-mode .rock-lens-container, 
+body.dark-mode .watch-planet-container {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
-@media (max-width: 768px) {
-  .menu-container {
-    flex-direction: column;
-    padding: 10px 20px;
-  }
-  .menu-list {
-    margin-top: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+h1 {
+    color: var(--primary-color);
+    font-weight: 700;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 2rem;
 }
 
-/* CloudLens 컴포넌트 스타일 */
-.cloud-lens-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 30px 20px;
-  background-color: var(--color-surface);
-  border-radius: 12px;
-  box-shadow: var(--box-shadow-subtle);
+h2 {
+    color: var(--text-color);
+    margin-top: 25px;
+    font-weight: 600;
+    font-size: 1.5rem;
 }
 
-.cloud-lens-container h1 {
-  color: var(--color-primary);
-  margin-bottom: 5px;
-  font-size: 2.5em;
-  font-weight: 700;
+button {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 15px;
 }
 
-.cloud-lens-container p {
-  color: var(--color-text-medium);
-  font-size: 1.1em;
+button:hover:not(:disabled) {
+    background-color: #388e3c;
 }
 
-.cloud-lens-container h2 {
-    color: var(--color-text-dark);
-    font-size: 1.5em;
-    border-bottom: 2px solid var(--color-border);
-    padding-bottom: 5px;
-    margin-bottom: 15px;
-}
-
-.webcam-and-capture-area {
-  margin: 30px auto;
-  padding: 20px;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  background-color: var(--color-background-light);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.webcam-and-capture-area > div {
-    border: 3px solid var(--color-primary);
-    border-radius: 8px;
-    overflow: hidden;
+button:disabled {
+    background-color: var(--sub-text-color);
+    cursor: not-allowed;
 }
 
 .webcam-and-capture-area video {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.webcam-and-capture-area div > div {
-    font-size: 1.2em;
-    font-weight: 600;
-    color: var(--color-text-dark);
-}
-
-.webcam-and-capture-area div > div p {
-    margin: 5px 0;
-    color: inherit;
-}
-
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 15px 0;
-  background-color: var(--color-secondary);
-  color: var(--color-surface);
-  border: none;
-  border-radius: 5px;
-  font-weight: 600;
-  transition: background-color var(--transition-speed), transform 0.1s;
-}
-
-button:hover:not(:disabled) {
-  background-color: #43a047;
-  transform: translateY(-1px);
-}
-
-button:active:not(:disabled) {
-  background-color: #388e3c;
-  transform: translateY(0);
-}
-
-button:disabled {
-  background-color: var(--color-border);
-  color: var(--color-text-medium);
-  cursor: not-allowed;
-}
-
-.result-area {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 20px;
-  align-items: flex-start;
-  padding: 20px 0;
-  border-top: 1px solid var(--color-border);
-}
-
-.captured-image-preview, .prediction-box {
-    padding: 20px;
-    border-radius: 8px;
-    background-color: var(--color-surface);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    flex-basis: 45%;
-}
-
-.captured-image-preview img {
-    border-radius: 4px;
-    width: 100%;
+    max-width: 400px;
     height: auto;
-    object-fit: contain;
-    border: 1px solid var(--color-border);
+    border: 3px solid var(--primary-color);
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
 }
 
 .prediction-box {
-    border-left: 5px solid var(--color-primary);
-    text-align: left;
-}
-
-.prediction-box strong {
-    color: var(--color-primary);
-}
-
-.prediction-box h3 {
-    color: var(--color-text-dark);
+    border-left: 5px solid var(--active-color);
+    padding-left: 20px;
     margin-top: 20px;
-    font-size: 1.2em;
 }
 
-.prediction-box p {
-    font-size: 1em;
-    line-height: 1.6;
+.result-area {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+.captured-image-preview img {
+    max-width: 300px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.weather-analysis-container div {
+    margin-bottom: 20px;
+}
+
+.weather-analysis-container strong {
+    color: var(--primary-color);
+}
+
+.rock-lens-container video {
+    max-width: 100%;
+    height: auto;
 }
 
 @media (max-width: 768px) {
-  .cloud-lens-container {
-    padding: 20px 10px;
-  }
-  
-  .webcam-and-capture-area {
-      max-width: 100%;
-  }
+    .menu-container {
+        flex-direction: column;
+        padding: 10px 20px;
+    }
 
-  .webcam-and-capture-area > div {
-      width: 100% !important;
-      height: 250px !important;
-  }
-  
-  .result-area {
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .captured-image-preview, .prediction-box {
-      flex-basis: 100%;
-  }
+    .menu-title {
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    
+    .menu-title a {
+        font-size: 1.5rem;
+    }
+
+    .menu-list {
+        width: 100%;
+        justify-content: space-around;
+        gap: 10px;
+    }
+
+    .menu-item {
+        flex: 1;
+        text-align: center;
+    }
+    
+    .menu-item a {
+        font-size: 0.75rem;
+    }
+    
+    .active-indicator {
+        bottom: -5px;
+        font-size: 0.6rem;
+    }
+
+    .App-header {
+        padding: 20px 10px;
+    }
+
+    .main-title {
+        font-size: 2.2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .App-logo {
+        height: 150px;
+    }
+
+    .main-links {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+        max-width: 300px;
+        margin: 30px auto 0;
+    }
+
+    .cloud-lens-container, .weather-analysis-container, .rock-lens-container, .watch-planet-container {
+        padding: 20px 15px;
+        border-radius: 8px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    .result-area {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .captured-image-preview img {
+        max-width: 100%;
+    }
+    
+    .buttom-word {
+        flex-direction: column;
+        gap: 5px;
+    }
 }
