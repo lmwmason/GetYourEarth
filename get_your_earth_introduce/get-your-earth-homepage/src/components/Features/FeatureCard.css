@@ -1,0 +1,25 @@
+
+.feature-card {
+    background-color: #111;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.feature-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 10px;
+}
+
+.feature-description {
+    font-size: 1rem;
+    opacity: 0.8;
+    line-height: 1.5;
+}

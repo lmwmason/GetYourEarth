@@ -1,0 +1,28 @@
+
+.main-footer {
+    padding: 40px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.main-footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-footer p {
+    margin: 0;
+    opacity: 0.6;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #fff;
+    opacity: 0.6;
+    margin-left: 20px;
+    transition: opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+}
