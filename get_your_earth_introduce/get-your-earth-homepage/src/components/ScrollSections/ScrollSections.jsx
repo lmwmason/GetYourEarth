@@ -69,7 +69,7 @@ const ScrollSections = () => {
   }, []);
 
   return (
-    <div ref={component} className="scroll-sections-container">
+    <div id="features" ref={component} className="scroll-sections-container">
       {sections.map((section, index) => (
         <section key={index} className="scroll-section" ref={el => sectionRefs.current[index] = el}>
           <div className="scroll-section-image">
