@@ -8,6 +8,14 @@ import RockLens from './pages/rockLens'
 import WatchPlanet from './pages/watchPlanet'
 import { Sun, Moon, Atom } from 'lucide-react';
 
+declare global {
+  interface Window {
+    kakao_ad_area: {
+      reloadAll: () => void;
+    } | undefined;
+  }
+}
+
 const getInitialColorMode = (): 'light' | 'dark' => {
   if (typeof window !== 'undefined' && window.matchMedia) {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -17,7 +25,42 @@ const getInitialColorMode = (): 'light' | 'dark' => {
   return 'light';
 };
 
+const reloadKakaoAd = () => {
+    if (window.kakao_ad_area && typeof window.kakao_ad_area.reloadAll === 'function') {
+        window.kakao_ad_area.reloadAll();
+    }
+};
+
 const App:React.FC = () => {
+
+  useEffect(() => {
+    let script: HTMLScriptElement | null = document.querySelector('script[src*="ba.min.js"]') as HTMLScriptElement | null;
+
+    if (script) {
+        reloadKakaoAd();
+        return;
+    }
+
+    script = document.createElement("script") as HTMLScriptElement;
+    
+    script.setAttribute("src", "//t1.daumcdn.net/kas/static/ba.min.js");
+    script.setAttribute("charset", "utf-8");
+    script.setAttribute("async", "true");
+
+    script.onload = () => {
+        reloadKakaoAd();
+    };
+
+    document.body.appendChild(script);
+    
+    return () => {
+        if (script) {
+            script.onload = null;
+        }
+    };
+  }, []);
+
+
   const [hash, setHash] = useState<string>(window.location.hash);
   const [colorMode, setColorMode] = useState<'light' | 'dark'>(getInitialColorMode);
   
@@ -98,7 +141,12 @@ const App:React.FC = () => {
       <header className="App-header">
         {renderContent()}
       </header>
-      
+      <div className="ad-container">
+                <ins className="kakao_ad_area"
+                     data-ad-unit="DAN-44vrI4lFIUwbdtom"
+                     data-ad-width="320"
+                     data-ad-height="100"></ins>
+            </div>
       <footer className="footer-area">
         <div className="buttom-word">
           <a href="https://github.com/lmwmason" target="_blank" rel="noopener noreferrer">@happy coding</a>
