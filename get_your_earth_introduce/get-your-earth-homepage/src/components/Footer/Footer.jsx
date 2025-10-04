@@ -10,7 +10,7 @@ const Footer = () => {
             <div className="footer-links">
                 <a href="#">개인정보 처리방침</a>
                 <a href="#">이용약관</a>
-                <a href="#">문의하기</a>
+                <a href="mailto:lmwmason@naver.com">문의하기</a>
             </div>
         </div>
     </footer>
