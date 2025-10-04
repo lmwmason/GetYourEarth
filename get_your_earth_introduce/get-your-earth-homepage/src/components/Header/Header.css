@@ -52,3 +52,38 @@
 .nav-links a:hover {
     opacity: 1;
 }
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 52px;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        padding: 20px 0;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}

@@ -26,3 +26,17 @@
 .footer-links a:hover {
     opacity: 1;
 }
+
+@media (max-width: 768px) {
+    .main-footer .container {
+        flex-direction: column;
+    }
+
+    .main-footer p {
+        margin-bottom: 10px;
+    }
+
+    .footer-links a {
+        margin: 0 10px;
+    }
+}

@@ -46,3 +46,13 @@
 .cta-button:hover {
     background-color: #0077ed;
 }
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+}
