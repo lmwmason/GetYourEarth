@@ -41,8 +41,12 @@ Follow these steps to set up and run the project locally.
 
 ```bash
 git clone https://github.com/lmwmason/GetYourEarth.git
-cd get_your_earth  #if you want to use GetYourEarth
-cd get_your_earth_introduce/get-your-earth-homepage  #if you want to use introducing GetYourEarth
+
+#if you want to use GetYourEarth
+cd get_your_earth
+
+#if you want to use introducing GetYourEarth
+cd get_your_earth_introduce/get-your-earth-homepage
 ```
 
 ### 2. Install Dependencies
