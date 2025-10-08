@@ -55,7 +55,6 @@ const WatchPlanet: React.FC = () => {
     
     const canvasElement = renderer.domElement; 
 
-    // --- 조명, 별 생성 로직 (생략) ---
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
@@ -63,11 +62,8 @@ const WatchPlanet: React.FC = () => {
     sunLight.position.set(0, 0, 0);
     scene.add(sunLight);
     
-    // 별 생성 로직 (생략)
-
-    // --- 행성 및 궤도 생성 ---
     const planets: { [key: string]: THREE.Mesh } = {};
-    const raycastTargets: THREE.Object3D[] = []; // Raycasting 대상 목록
+    const raycastTargets: THREE.Object3D[] = [];
 
     Object.entries(planetData).forEach(([key, data]) => {
       const geometry = new THREE.SphereGeometry(data.radius, 32, 32);
@@ -80,15 +76,13 @@ const WatchPlanet: React.FC = () => {
       planet.name = key; 
       planet.userData = { key, ...data }; 
       
-      // 행성을 Scene에 추가하고 planets 맵에 저장
       scene.add(planet);
       planets[key] = planet;
-      raycastTargets.push(planet); // 행성 Mesh 자체는 항상 Target
+      raycastTargets.push(planet);
 
       if (key !== 'sun') {
         planet.position.x = data.distance;
         
-        // 궤도 생성 (생략)
         const orbitGeometry = new THREE.BufferGeometry();
         const orbitPoints: number[] = [];
         for (let i = 0; i <= 64; i++) {
@@ -104,22 +98,17 @@ const WatchPlanet: React.FC = () => {
         const orbit = new THREE.Line(orbitGeometry, orbitMaterial);
         scene.add(orbit);
         
-        // 클릭 감지 헬퍼 생성
         const helperGeometry = new THREE.SphereGeometry(data.radius * 2.5, 16, 16); 
         const helperMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
         const helper = new THREE.Mesh(helperGeometry, helperMaterial);
         helper.name = `${key}-helper`; 
-        // 헬퍼의 userData에 행성 데이터의 key만 저장하여 간단하게 참조
         helper.userData = { key: key, isHelper: true }; 
         
-        // **핵심 수정:** 헬퍼를 행성 객체의 자식으로만 추가 (Scene에 직접 추가하지 않음)
-        // 행성 위치가 바뀌면 헬퍼도 따라 이동
         planet.add(helper); 
-        raycastTargets.push(helper); // 헬퍼를 Raycasting 대상에 추가
+        raycastTargets.push(helper);
       }
     });
 
-    // --- 토성 고리 ---
     const ringGeometry = new THREE.RingGeometry(13, 20, 64);
     const ringMaterial = new THREE.MeshBasicMaterial({ 
       color: 0xc9b58a, 
@@ -131,15 +120,13 @@ const WatchPlanet: React.FC = () => {
     ring.rotation.x = Math.PI / 2;
     ring.name = 'saturn-ring'; 
     
-    // **토성 객체에 고리 추가**
-    if (planets.saturn) { // 토성 객체가 planets 맵에 존재하는지 확인
+    if (planets.saturn) {
         planets.saturn.add(ring); 
     } else {
         console.error("토성 객체가 초기화되지 않아 고리를 추가할 수 없습니다.");
     }
     
 
-    // --- Interaction (Raycasting) ---
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
@@ -151,18 +138,15 @@ const WatchPlanet: React.FC = () => {
 
       raycaster.setFromCamera(mouse, camera);
       
-      // **RaycastTargets 목록 사용, 자식 검사 안 함 (false)**
       const intersects = raycaster.intersectObjects(raycastTargets, false); 
 
       if (intersects.length > 0) {
         const intersected = intersects[0].object;
         let selectedData: PlanetData | null = null;
         
-        // 1. 행성 Mesh 자체인 경우
         if (intersected.userData?.name) {
              selectedData = intersected.userData as PlanetData;
         } 
-        // 2. 헬퍼 Mesh인 경우 (헬퍼의 userData에 저장된 key를 사용해 planets 맵에서 행성 데이터 참조)
         else if (intersected.userData?.isHelper && intersected.userData.key) {
             const planetKey = intersected.userData.key as string;
             selectedData = planetData[planetKey]; 
@@ -193,7 +177,6 @@ const WatchPlanet: React.FC = () => {
     canvasElement.addEventListener('click', handleClick);
     canvasElement.addEventListener('mousemove', handleMouseMove);
 
-    // --- Animation Loop ---
     const angle: { [key: string]: number } = {};
     Object.keys(planetData).forEach(key => {
       if (key !== 'sun') angle[key] = Math.random() * Math.PI * 2;
@@ -215,7 +198,6 @@ const WatchPlanet: React.FC = () => {
             planets[key].position.x = x;
             planets[key].position.z = z;
             
-            // 헬퍼는 행성의 자식이므로 자동으로 따라 이동합니다.
             
             planets[key].rotation.y += 0.01;
           }
@@ -227,7 +209,6 @@ const WatchPlanet: React.FC = () => {
 
     animate();
 
-    // --- Cleanup (생략) ---
     const handleResize = () => {
       const newWidth = window.innerWidth;
       const newHeight = window.innerHeight;
@@ -250,7 +231,6 @@ const WatchPlanet: React.FC = () => {
     };
   }, []); 
 
-  // --- React UI Rendering (생략) ---
   return (
     <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden', position: 'relative', background: '#111' }}>
       <div ref={mountRef} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }} />
